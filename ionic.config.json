@@ -1,0 +1,7 @@
+{
+  "name": "estudioapp-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
