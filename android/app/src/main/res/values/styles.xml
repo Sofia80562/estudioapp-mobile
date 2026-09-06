@@ -15,8 +15,9 @@
         <item name="android:background">@null</item>
     </style>
 
-
+    <!-- Pantalla de inicio de carga (Evita el fondo negro en el arranque) -->
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/splash</item>
+        <!-- Se usa un tono azul/celeste limpio (#0288D1) para la carga que es amigable a la vista -->
+        <item name="android:background">@color/splashBackground</item>
     </style>
 </resources>

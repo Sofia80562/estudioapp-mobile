@@ -4,8 +4,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { IonInputPasswordToggle, IonText } from '@ionic/react';
+import { IonInputPasswordToggle, IonRouterLink } from '@ionic/react';
 import AppButton from '../../../components/common/AppButton';
+import AppInteractionAlert from '../../../components/feedback/AppInteractionAlert';
 import AppInput from '../../../components/forms/AppInput';
 import AppPage from '../../../components/layout/AppPage';
 import { loginWithPassword, redirectToLogin } from '../../../services/api/endpoints/auth';
@@ -17,17 +18,17 @@ import AuthShell from '../components/AuthShell';
 import { SESSION_QUERY_KEY } from '../hooks/useSession';
 import './login-page.css';
 
-// Web/dev: flujo adaptado contra el proxy de Vite o backend local
 const WebLogin: React.FC<{ hasAuthError: boolean }> = ({ hasAuthError }) => {
   const [isNavigating, setIsNavigating] = useState(false);
 
   return (
     <AuthShell title="Te damos la bienvenida" description="Continúa con tu cuenta segura de EstudioApp.">
-      {hasAuthError && (
-        <IonText className="auth-message auth-message--error" role="alert">
-          <p>No se pudo completar el inicio de sesión. Intenta nuevamente.</p>
-        </IonText>
-      )}
+      <AppInteractionAlert
+        isOpen={hasAuthError}
+        kind="error"
+        header="Inicio de sesión incompleto"
+        message="No se pudo completar el inicio de sesión. Intenta nuevamente."
+      />
       <AppButton
         expand="block"
         isLoading={isNavigating}
@@ -39,12 +40,14 @@ const WebLogin: React.FC<{ hasAuthError: boolean }> = ({ hasAuthError }) => {
         Continuar
       </AppButton>
       <p className="auth-shell__privacy">Tus datos de acceso se procesan de forma segura.</p>
+      <p className="auth-shell__privacy">
+        ¿No tienes cuenta? <IonRouterLink routerLink="/register">Regístrate</IonRouterLink>
+      </p>
     </AuthShell>
   );
 };
 
-// Nativo: formulario propio de usuario/contraseña para el emulador
-const NativeLoginForm: React.FC = () => {
+const NativeLoginForm: React.FC<{ defaultUsername?: string }> = ({ defaultUsername }) => {
   const queryClient = useQueryClient();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -54,7 +57,7 @@ const NativeLoginForm: React.FC = () => {
     formState: { isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
-    defaultValues: { username: '', password: '' },
+    defaultValues: { username: defaultUsername ?? '', password: '' },
   });
 
   const onSubmit = async (values: LoginFormValues): Promise<void> => {
@@ -75,14 +78,14 @@ const NativeLoginForm: React.FC = () => {
   };
 
   return (
-    <AuthShell title="Inicia sesión" description="Ingresa tus credenciales para continuar en EstudioApp.">
+    <AuthShell title="Inicia sesión" description="Ingresa tus credenciales para continuar.">
       <form className="auth-form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Controller
           name="username"
           control={control}
           render={({ field, fieldState }) => (
             <AppInput
-              label="Correo o Usuario"
+              label="Usuario o Correo"
               autocomplete="username"
               value={field.value}
               disabled={isSubmitting}
@@ -112,28 +115,41 @@ const NativeLoginForm: React.FC = () => {
           )}
         />
 
-        {submitError && (
-          <IonText className="auth-message auth-message--error" role="alert" aria-live="polite">
-            <p>{submitError}</p>
-          </IonText>
-        )}
+        <AppInteractionAlert
+          isOpen={Boolean(submitError)}
+          kind="error"
+          header="No se pudo iniciar sesión"
+          message={submitError ?? ''}
+          onDismiss={() => setSubmitError(null)}
+        />
 
         <AppButton expand="block" type="submit" isLoading={isSubmitting}>
           Iniciar sesión
         </AppButton>
       </form>
       <p className="auth-shell__privacy">Nunca compartiremos tus credenciales.</p>
+      <p className="auth-shell__privacy">
+        ¿No tienes cuenta? <IonRouterLink routerLink="/register">Regístrate</IonRouterLink>
+      </p>
     </AuthShell>
   );
 };
 
+interface LoginLocationState {
+  email?: string;
+}
+
 const LoginPage: React.FC = () => {
-  const location = useLocation();
+  const location = useLocation<LoginLocationState | undefined>();
   const hasAuthError = new URLSearchParams(location.search).get('error') === 'auth';
 
   return (
     <AppPage title="Iniciar sesión en EstudioApp" showHeader={false}>
-      {Capacitor.isNativePlatform() ? <NativeLoginForm /> : <WebLogin hasAuthError={hasAuthError} />}
+      {Capacitor.isNativePlatform() ? (
+        <NativeLoginForm defaultUsername={location.state?.email} />
+      ) : (
+        <WebLogin hasAuthError={hasAuthError} />
+      )}
     </AppPage>
   );
 };
