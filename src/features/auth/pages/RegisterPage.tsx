@@ -11,13 +11,11 @@ import type { ManagerRegisterFormValues, PlayerRegisterFormValues } from '../../
 import AccountTypeStep from '../components/AccountTypeStep';
 import AuthShell from '../components/AuthShell';
 import ManagerRegisterForm from '../components/ManagerRegisterForm';
-import PlayerRegisterForm from '../components/PlayerRegisterForm';
+import StudentRegisterForm from '../components/StudentRegisterForm';
 import { useRegisterMutation } from '../hooks/useRegister';
 import '../pages/login-page.css';
 import './register-page.css';
 
-// # El backend de EstudioApp maneja los errores mediante mensajes generales
-// # y códigos estándar, manteniendo la misma convención del proyecto base.
 const mapRegisterError = (error: unknown): string => {
   if (error instanceof AppClientError && error.httpStatus === 429) {
     return 'Demasiados intentos. Espera un momento e inténtalo de nuevo.';
@@ -41,7 +39,6 @@ const RegisterPage: React.FC = () => {
   const [result, setResult] = useState<RegisterResponse | null>(null);
   const registerMutation = useRegisterMutation();
 
-  // # Redirección inteligente al login dependiendo de si estamos en plataforma nativa o web
   const goToLogin = (email: string): void => {
     if (Capacitor.isNativePlatform()) {
       history.push('/login', { email });
@@ -55,8 +52,7 @@ const RegisterPage: React.FC = () => {
     setSubmitError(null);
 
     try {
-      // # Adaptado para registrarse como estudiante/usuario estándar en EstudioApp
-      const response = await registerMutation.mutateAsync({ ...values, accountType: 'futbolista' });
+      const response = await registerMutation.mutateAsync({ ...values, accountType: 'estudiante' as any });
       setResult(response);
     } catch (error) {
       setSubmitError(mapRegisterError(error));
@@ -67,8 +63,7 @@ const RegisterPage: React.FC = () => {
     setSubmitError(null);
 
     try {
-      // # Adaptado para gestores de grupos o sedes académicas
-      const response = await registerMutation.mutateAsync({ ...values, accountType: 'gestor-de-cancha' });
+      const response = await registerMutation.mutateAsync({ ...values, accountType: 'institucion' as any });
       setResult(response);
     } catch (error) {
       setSubmitError(mapRegisterError(error));
@@ -76,17 +71,11 @@ const RegisterPage: React.FC = () => {
   };
 
   if (result) {
-    const isFutbolista = result.accountType === 'futbolista';
-
     return (
       <AppPage title="Cuenta creada" showHeader={false}>
         <AuthShell
-          title={isFutbolista ? '¡Cuenta creada!' : 'Solicitud enviada'}
-          description={
-            isFutbolista
-              ? 'Ya puedes iniciar sesión con tu correo y tu contraseña.'
-              : 'Tu cuenta fue creada, pero el acceso de Administrador/Gestor queda pendiente de aprobación.'
-          }
+          title="¡Cuenta creada!"
+          description="Ya puedes iniciar sesión con tu correo y tu contraseña."
         >
           <AppButton expand="block" onClick={() => goToLogin(result.user.email)}>
             Ir a iniciar sesión
@@ -101,18 +90,13 @@ const RegisterPage: React.FC = () => {
       <AuthShell
         title={accountType ? 'Crea tu cuenta' : '¿Cómo quieres usar EstudioApp?'}
         description={
-          accountType === 'gestor-de-cancha'
-            ? 'Registra tu grupo de estudio o institución.'
-            : accountType === 'futbolista'
-              ? 'Completa tus datos para organizar tus metas académicas.'
-              : 'Elige el tipo de cuenta que necesitas.'
+          accountType
+            ? 'Completa tus datos para organizar tus metas académicas.'
+            : 'Elige el tipo de cuenta que necesitas.'
         }
       >
         {!accountType && <AccountTypeStep onSelect={setAccountType} />}
-        {accountType === 'futbolista' && <PlayerRegisterForm onSubmit={handlePlayerSubmit} submitError={submitError} />}
-        {accountType === 'gestor-de-cancha' && (
-          <ManagerRegisterForm onSubmit={handleManagerSubmit} submitError={submitError} />
-        )}
+        {accountType && <StudentRegisterForm onSubmit={handlePlayerSubmit} submitError={submitError} />}
 
         {accountType && (
           <IonButton

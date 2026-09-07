@@ -1,0 +1,15 @@
+{
+  "short_name": "EstudioApp",
+  "name": "Estudio App",
+  "icons": [
+    {
+      "src": "assets/icon/logotipo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}
