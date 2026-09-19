@@ -56,3 +56,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(mappedError);
   },
 );
+
+export default apiClient;
