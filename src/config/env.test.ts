@@ -1,20 +1,37 @@
-/// <reference types="vite/client" />
+import { describe, expect, it } from 'vitest';
+import { env, resolveApiBaseUrl } from './env';
 
-interface AppEnv {
-  apiBaseUrl: string;
-  apiTimeoutMs: number;
-}
+describe('env', () => {
+  it('exposes an apiBaseUrl read from VITE_API_BASE_URL', () => {
+    expect(env.apiBaseUrl).toBeTruthy();
+  });
 
-const requireEnv = (key: string, value: string | undefined): string => {
-  if (!value) {
-    throw new Error(`${key} no está definida. Revisa tu archivo .env (ver .env.example).`);
-  }
-  return value;
-};
+  it('defaults apiTimeoutMs to a positive number', () => {
+    expect(env.apiTimeoutMs).toBeGreaterThan(0);
+  });
 
-const readEnv = (): AppEnv => ({
-  apiBaseUrl: requireEnv('VITE_API_BASE_URL', import.meta.env.VITE_API_BASE_URL),
-  apiTimeoutMs: Number(import.meta.env.VITE_API_TIMEOUT_MS ?? 15000),
+  describe('resolveApiBaseUrl', () => {
+    const sources = {
+      base: 'https://api.example.com/api',
+      android: 'http://10.0.2.2:3000/api',
+      ios: 'http://localhost:3000/api',
+    };
+
+    it('usa la URL específica de cada plataforma nativa', () => {
+      expect(resolveApiBaseUrl({ platform: 'android', ...sources })).toBe('http://10.0.2.2:3000/api');
+      expect(resolveApiBaseUrl({ platform: 'ios', ...sources })).toBe('http://localhost:3000/api');
+    });
+
+    it('en web usa VITE_API_BASE_URL', () => {
+      expect(resolveApiBaseUrl({ platform: 'web', ...sources })).toBe('https://api.example.com/api');
+    });
+
+    it('si falta la URL de la plataforma, cae a VITE_API_BASE_URL', () => {
+      expect(resolveApiBaseUrl({ platform: 'ios', base: '/api' })).toBe('/api');
+    });
+
+    it('falla con un mensaje claro si no hay ninguna URL', () => {
+      expect(() => resolveApiBaseUrl({ platform: 'android' })).toThrow(/VITE_API_BASE_URL/);
+    });
+  });
 });
-
-export const env = readEnv();

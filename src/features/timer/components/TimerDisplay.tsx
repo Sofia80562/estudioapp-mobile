@@ -1,29 +1,22 @@
 import React from 'react';
-import { IonCard, IonCardContent } from '@ionic/react';
+import { IonText } from '@ionic/react';
 
 interface TimerDisplayProps {
   formattedTime: string;
-  mode: 'work' | 'shortBreak' | 'longBreak';
+  isRunning: boolean;
 }
 
-export const TimerDisplay: React.FC<TimerDisplayProps> = ({ formattedTime, mode }) => {
-  const getModeLabel = () => {
-    switch (mode) {
-      case 'work':
-        return 'Momento de concentrarse';
-      case 'shortBreak':
-        return 'Tiempo de descanso corto';
-      case 'longBreak':
-        return 'Pausa larga merecida';
-    }
-  };
-
+export const TimerDisplay: React.FC<TimerDisplayProps> = ({ formattedTime, isRunning }) => {
   return (
-    <IonCard className="timer-card">
-      <IonCardContent className="ion-text-center">
-        <h1 className="timer-clock">{formattedTime}</h1>
-        <p className="timer-subtitle">{getModeLabel()}</p>
-      </IonCardContent>
-    </IonCard>
+    <div style={{ padding: '20px 0' }}>
+      <IonText color="primary">
+        <h1 className="timer-display-text">{formattedTime}</h1>
+      </IonText>
+      <IonText color="medium">
+        <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 500 }}>
+          {isRunning ? '🔥 Sesión de estudio en curso...' : '⏸️ Cronómetro en pausa'}
+        </p>
+      </IonText>
+    </div>
   );
 };

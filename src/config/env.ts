@@ -1,6 +1,28 @@
+import { Capacitor } from '@capacitor/core';
+
+// Declaración global para forzar a TypeScript a reconocer import.meta.env
+declare global {
+  interface ImportMeta {
+    env: {
+      VITE_API_BASE_URL?: string;
+      VITE_API_BASE_URL_ANDROID?: string;
+      VITE_API_BASE_URL_IOS?: string;
+      VITE_API_TIMEOUT_MS?: string | number;
+      [key: string]: any;
+    };
+  }
+}
+
 interface AppEnv {
   apiBaseUrl: string;
   apiTimeoutMs: number;
+}
+
+interface ApiBaseUrlSources {
+  platform: string;
+  base?: string;
+  android?: string;
+  ios?: string;
 }
 
 const requireEnv = (key: string, value: string | undefined): string => {
@@ -10,8 +32,18 @@ const requireEnv = (key: string, value: string | undefined): string => {
   return value;
 };
 
+export const resolveApiBaseUrl = ({ platform, base, android, ios }: ApiBaseUrlSources): string => {
+  const byPlatform = platform === 'android' ? android : platform === 'ios' ? ios : undefined;
+  return requireEnv('VITE_API_BASE_URL', byPlatform || base);
+};
+
 const readEnv = (): AppEnv => ({
-  apiBaseUrl: requireEnv('VITE_API_BASE_URL', import.meta.env.VITE_API_BASE_URL),
+  apiBaseUrl: resolveApiBaseUrl({
+    platform: Capacitor.getPlatform(),
+    base: import.meta.env.VITE_API_BASE_URL,
+    android: import.meta.env.VITE_API_BASE_URL_ANDROID,
+    ios: import.meta.env.VITE_API_BASE_URL_IOS,
+  }),
   apiTimeoutMs: Number(import.meta.env.VITE_API_TIMEOUT_MS ?? 15000),
 });
 

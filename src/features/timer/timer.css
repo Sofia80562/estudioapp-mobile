@@ -1,32 +1,21 @@
+.timer-page {
+  --background: #f8fafc;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
 .timer-card {
   width: 100%;
-  max-width: 350px;
-  margin: 20px auto;
-  text-align: center;
-  padding: 30px 10px;
+  max-width: 400px;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.timer-clock {
-  font-size: 4.5rem;
-  font-weight: bold;
-  margin: 20px 0;
-  color: var(--ion-color-primary);
-  letter-spacing: 2px;
-}
-
-.timer-subtitle {
-  color: var(--ion-color-medium);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.timer-controls {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  padding: 20px;
 }

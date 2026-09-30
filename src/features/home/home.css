@@ -1,0 +1,26 @@
+/* Estilos para el Dashboard / Home de EstudioApp */
+
+ion-content {
+  --background: #f8fafc;
+}
+
+.dashboard-header {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.welcome-card {
+  border-radius: 16px;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+  margin: 16px;
+  padding: 8px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 20px 16px 8px 16px;
+}

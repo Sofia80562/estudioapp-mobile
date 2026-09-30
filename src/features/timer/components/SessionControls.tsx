@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
-import { play, pause, refresh } from 'ionicons/icons';
+import { playOutline, pauseOutline, refreshOutline } from 'ionicons/icons';
 
 interface SessionControlsProps {
   isRunning: boolean;
@@ -9,25 +9,24 @@ interface SessionControlsProps {
   onReset: () => void;
 }
 
-export const SessionControls: React.FC<SessionControlsProps> = ({
-  isRunning,
-  onStart,
-  onPause,
-  onReset,
-}) => {
+export const SessionControls: React.FC<SessionControlsProps> = ({ isRunning, onStart, onPause, onReset }) => {
   return (
-    <div className="timer-controls">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '20px' }}>
       {!isRunning ? (
-        <IonButton color="success" shape="round" onClick={onStart}>
-          <IonIcon slot="icon-only" icon={play} />
+        <IonButton color="success" onClick={onStart} shape="round">
+          <IonIcon slot="start" icon={playOutline} />
+          Iniciar
         </IonButton>
       ) : (
-        <IonButton color="warning" shape="round" onClick={onPause}>
-          <IonIcon slot="icon-only" icon={pause} />
+        <IonButton color="warning" onClick={onPause} shape="round">
+          <IonIcon slot="start" icon={pauseOutline} />
+          Pausar
         </IonButton>
       )}
-      <IonButton color="medium" fill="outline" shape="round" onClick={onReset}>
-        <IonIcon slot="icon-only" icon={refresh} />
+
+      <IonButton color="medium" fill="outline" onClick={onReset} shape="round">
+        <IonIcon slot="start" icon={refreshOutline} />
+        Reiniciar
       </IonButton>
     </div>
   );

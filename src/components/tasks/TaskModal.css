@@ -1,0 +1,48 @@
+/* Estilos modernos y elegantes para el Modal de Tareas - EstudioApp */
+
+.ion-modal {
+  --border-radius: 20px;
+  --box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+}
+
+/* Personalización de la barra superior del modal */
+ion-toolbar {
+  --background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  --color: #ffffff;
+}
+
+ion-toolbar ion-title {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+ion-toolbar ion-button {
+  --color: #ffffff;
+  font-weight: 600;
+}
+
+/* Contenedor interno y campos de formulario */
+ion-content {
+  --background: #f8fafc;
+}
+
+ion-item {
+  --background: #ffffff;
+  --border-radius: 12px;
+  --highlight-color-focused: #4f46e5;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+}
+
+ion-label {
+  font-weight: 600;
+  color: #334155 !important;
+  font-size: 0.9rem;
+}
+
+/* Efecto al enfocar inputs */
+ion-input, ion-textarea {
+  --color: #1e293b;
+  font-size: 0.95rem;
+}

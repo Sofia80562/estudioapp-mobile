@@ -1,70 +1,39 @@
 import React from 'react';
-import {
-  IonContent,
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
-} from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent } from '@ionic/react';
+import { useTimer } from '../hooks/useTimer';
 import { TimerDisplay } from '../components/TimerDisplay';
 import { SessionControls } from '../components/SessionControls';
-import { useTimer, TimerMode } from '../hooks/useTimer';
-import '../timer.css'; // Importa los estilos que definimos
+import '../timer.css';
 
 export const TimerPage: React.FC = () => {
-  const {
-    mode,
-    formattedTime,
-    isRunning,
-    startTimer,
-    pauseTimer,
-    resetTimer,
-    changeMode,
-  } = useTimer();
+  const { formattedTime, isRunning, start, pause, reset } = useTimer();
 
   return (
-    <IonPage>
+    <IonPage className="timer-page">
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Cronómetro Pomodoro</IonTitle>
+        <IonToolbar color="primary">
+          <IonTitle>Temporizador Pomodoro</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '15px' }}>
-          
-          {/* Segmento para cambiar entre modos de estudio y descanso */}
-          <IonSegment
-            value={mode}
-            onIonChange={(e) => changeMode(e.detail.value as TimerMode)}
-            style={{ marginBottom: '20px', maxWidth: '380px' }}
-          >
-            <IonSegmentButton value="work">
-              <IonLabel>Estudio</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="shortBreak">
-              <IonLabel>Descanso</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="longBreak">
-              <IonLabel>Pausa Larga</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
+        <IonCard className="timer-card">
+          <IonCardContent>
+            <h2 style={{ color: '#1e293b', fontWeight: 'bold', margin: '0 0 10px 0' }}>Hora de Enfocarse</h2>
+            <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '10px' }}>
+              Mantén el ritmo en tus materias y alcanza tus metas de estudio.
+            </p>
 
-          {/* Componente visual del reloj */}
-          <TimerDisplay formattedTime={formattedTime} mode={mode} />
+            <TimerDisplay formattedTime={formattedTime} isRunning={isRunning} />
 
-          {/* Componente de botones de control */}
-          <SessionControls
-            isRunning={isRunning}
-            onStart={startTimer}
-            onPause={pauseTimer}
-            onReset={resetTimer}
-          />
-
-        </div>
+            <SessionControls
+              isRunning={isRunning}
+              onStart={start}
+              onPause={pause}
+              onReset={reset}
+            />
+          </IonCardContent>
+        </IonCard>
       </IonContent>
     </IonPage>
   );

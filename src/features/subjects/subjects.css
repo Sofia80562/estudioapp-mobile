@@ -1,0 +1,15 @@
+.subjects-page {
+  --background: #f8fafc;
+}
+
+.subject-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin: 16px;
+  background: #ffffff;
+}
+
+.subject-header {
+  font-weight: 700;
+  color: #1e293b;
+}
