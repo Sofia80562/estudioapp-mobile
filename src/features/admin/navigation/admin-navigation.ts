@@ -1,4 +1,12 @@
-import { businessOutline, keyOutline, peopleOutline, shieldCheckmarkOutline } from 'ionicons/icons';
+import { 
+  businessOutline, 
+  keyOutline, 
+  peopleOutline, 
+  shieldCheckmarkOutline, 
+  bookOutline, 
+  timerOutline, 
+  sparklesOutline 
+} from 'ionicons/icons';
 
 export interface AdminNavigationItem {
   id: string;
@@ -16,6 +24,36 @@ export interface AdminNavigationGroup {
 }
 
 export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
+  {
+    id: 'academic',
+    label: 'EstudioApp',
+    items: [
+      {
+        id: 'subjects',
+        label: 'Mis Materias',
+        description: 'Gestiona tus asignaturas, profesores y créditos.',
+        icon: bookOutline,
+        path: '/admin/subjects',
+        requiredPermissions: [],
+      },
+      {
+        id: 'timer',
+        label: 'Temporizador',
+        description: 'Controla tus sesiones de estudio Pomodoro.',
+        icon: timerOutline,
+        path: '/admin/timer',
+        requiredPermissions: [],
+      },
+      {
+        id: 'ai-assistant',
+        label: 'Asistente IA',
+        description: 'Resuelve dudas académicas con asistencia inteligente.',
+        icon: sparklesOutline,
+        path: '/admin/ai-assistant',
+        requiredPermissions: [],
+      },
+    ],
+  },
   {
     id: 'users-access',
     label: 'Usuarios y acceso',
