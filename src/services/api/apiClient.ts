@@ -13,7 +13,7 @@ import { AuthenticationError, mapApiError } from './errorMapper';
 // withCredentials: true (el navegador rechaza la combinación), así que en nativo va en false;
 // la sesión ahí viaja como Authorization: Bearer, no como cookie.
 export const apiClient = axios.create({
-  baseURL: env.apiBaseUrl,
+  baseURL: Capacitor.isNativePlatform() ? env.apiBaseUrl : '/api',
   timeout: env.apiTimeoutMs,
   withCredentials: !Capacitor.isNativePlatform(),
 });

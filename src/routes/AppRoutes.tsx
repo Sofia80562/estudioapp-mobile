@@ -9,6 +9,14 @@ import PublicRoute from './PublicRoute';
 export const AppRoutes: React.FC = () => {
   return (
     <>
+      {/* Redirecciones útiles por si entran directo a las rutas cortas */}
+      <Route exact path="/login">
+        <Redirect to="/auth/login" />
+      </Route>
+      <Route exact path="/register">
+        <Redirect to="/auth/register" />
+      </Route>
+
       <PublicRoute exact path="/auth/login" component={LoginPage} />
       <PublicRoute exact path="/auth/register" component={RegisterPage} />
 

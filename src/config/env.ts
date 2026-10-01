@@ -1,18 +1,5 @@
 import { Capacitor } from '@capacitor/core';
 
-// Declaración global para forzar a TypeScript a reconocer import.meta.env
-declare global {
-  interface ImportMeta {
-    env: {
-      VITE_API_BASE_URL?: string;
-      VITE_API_BASE_URL_ANDROID?: string;
-      VITE_API_BASE_URL_IOS?: string;
-      VITE_API_TIMEOUT_MS?: string | number;
-      [key: string]: any;
-    };
-  }
-}
-
 interface AppEnv {
   apiBaseUrl: string;
   apiTimeoutMs: number;
@@ -37,14 +24,25 @@ export const resolveApiBaseUrl = ({ platform, base, android, ios }: ApiBaseUrlSo
   return requireEnv('VITE_API_BASE_URL', byPlatform || base);
 };
 
-const readEnv = (): AppEnv => ({
-  apiBaseUrl: resolveApiBaseUrl({
-    platform: Capacitor.getPlatform(),
-    base: import.meta.env.VITE_API_BASE_URL,
-    android: import.meta.env.VITE_API_BASE_URL_ANDROID,
-    ios: import.meta.env.VITE_API_BASE_URL_IOS,
-  }),
-  apiTimeoutMs: Number(import.meta.env.VITE_API_TIMEOUT_MS ?? 15000),
-});
+const readEnv = (): AppEnv => {
+  // Se castea el entorno localmente para evitar colisiones con ImportMeta global de Vite
+  const metaEnv = import.meta.env as unknown as {
+    VITE_API_BASE_URL?: string;
+    VITE_API_BASE_URL_ANDROID?: string;
+    VITE_API_BASE_URL_IOS?: string;
+    VITE_API_TIMEOUT_MS?: string | number;
+    [key: string]: any;
+  };
+
+  return {
+    apiBaseUrl: resolveApiBaseUrl({
+      platform: Capacitor.getPlatform(),
+      base: metaEnv.VITE_API_BASE_URL,
+      android: metaEnv.VITE_API_BASE_URL_ANDROID,
+      ios: metaEnv.VITE_API_BASE_URL_IOS,
+    }),
+    apiTimeoutMs: Number(metaEnv.VITE_API_TIMEOUT_MS ?? 15000),
+  };
+};
 
 export const env = readEnv();
