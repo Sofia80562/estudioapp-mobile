@@ -12,12 +12,12 @@ describe('AccountTypeStep', () => {
     expect(onSelect).toHaveBeenCalledWith('estudiante');
   });
 
-  it('calls onSelect with "organizador" when the manager card is chosen', () => {
+  it('calls onSelect with "gestor-academico" when the manager card is chosen', () => {
     const onSelect = vi.fn();
     render(<AccountTypeStep onSelect={onSelect} />);
 
     fireEvent.click(screen.getByText('Gestionar grupos o sedes'));
 
-    expect(onSelect).toHaveBeenCalledWith('organizador');
+    expect(onSelect).toHaveBeenCalledWith('gestor-academico');
   });
 });

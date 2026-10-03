@@ -1,7 +1,7 @@
 /**
  * Tipo de cuenta permitido durante el flujo de autorregistro en el sistema.
  */
-export type RegisterAccountType = 'estudiante' | 'organizador';
+export type RegisterAccountType = 'estudiante' | 'gestor-academico';
 
 /**
  * Datos requeridos para la organización cuando el usuario se registra bajo un perfil administrativo o institucional.
@@ -41,7 +41,7 @@ interface RegisterAccountFields {
 export type RegisterRequest =
   | (RegisterAccountFields & { accountType: 'estudiante' })
   | (RegisterAccountFields & {
-      accountType: 'organizador';
+      accountType: 'gestor-academico';
       organization: RegisterOrganizationInput;
       venue: RegisterVenueInput;
     });
@@ -63,7 +63,7 @@ interface RegisterResponseUser {
 export type RegisterResponse =
   | { accountType: 'estudiante'; user: RegisterResponseUser }
   | {
-      accountType: 'organizador';
+      accountType: 'gestor-academico';
       user: RegisterResponseUser;
       accessRequestId: string;
       organizationStatus: 'PENDING_APPROVAL';

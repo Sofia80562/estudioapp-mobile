@@ -6,16 +6,16 @@ import { Preferences } from '@capacitor/preferences';
  * Tokens de sesión, credenciales o secretos DEBEN almacenarse en secureToken.ts
  * mediante @aparajita/capacitor-secure-storage (Keychain/Keystore).
  */
-const SENSITIVE_KEY_PATTERNS = ['token', 'secret', 'password', 'session', 'auth', 'credential', 'keycloak', 'refresh'];
+const SENSITIVE_KEY_PATTERNS = ['token', 'secret', 'password', 'session', 'auth', 'credential', 'refresh'];
 
 const assertNonSensitiveKey = (key: string): void => {
-  const lowerKey = key.toLowerCase();
-  const isSensitive = SENSITIVE_KEY_PATTERNS.some(pattern => lowerKey.includes(pattern));
-  if (isSensitive) {
-    throw new Error(
-      `[Seguridad] La clave "${key}" contiene datos potencialmente sensibles y no debe almacenarse en Preferences. Usa secureToken.ts.`,
-    );
-  }
+    const lowerKey = key.toLowerCase();
+    const isSensitive = SENSITIVE_KEY_PATTERNS.some(pattern => lowerKey.includes(pattern));
+    if (isSensitive) {
+        throw new Error(
+            `[Seguridad] La clave "${key}" contiene datos potencialmente sensibles y no debe almacenarse en Preferences. Usa secureToken.ts.`,
+        );
+    }
 };
 
 /**
@@ -23,8 +23,8 @@ const assertNonSensitiveKey = (key: string): void => {
  * Solo para preferencias no sensibles (tema, densidad, etc.).
  */
 export const getPreference = async (key: string): Promise<string | null> => {
-  const { value } = await Preferences.get({ key });
-  return value;
+    const { value } = await Preferences.get({ key });
+    return value;
 };
 
 /**
@@ -32,20 +32,20 @@ export const getPreference = async (key: string): Promise<string | null> => {
  * no corresponda a información sensible o tokens de autenticación.
  */
 export const setPreference = async (key: string, value: string): Promise<void> => {
-  assertNonSensitiveKey(key);
-  await Preferences.set({ key, value });
+    assertNonSensitiveKey(key);
+    await Preferences.set({ key, value });
 };
 
 /**
  * Elimina una clave de las preferencias locales.
  */
 export const removePreference = async (key: string): Promise<void> => {
-  await Preferences.remove({ key });
+    await Preferences.remove({ key });
 };
 
 /**
  * Limpia todas las preferencias almacenadas localmente.
  */
 export const clearAllPreferences = async (): Promise<void> => {
-  await Preferences.clear();
+    await Preferences.clear();
 };

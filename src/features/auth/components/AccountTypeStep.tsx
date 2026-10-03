@@ -19,7 +19,7 @@ const AccountTypeStep: React.FC<AccountTypeStepProps> = ({ onSelect }) => (
       <IonIcon slot="end" icon={chevronForwardOutline} className="account-type-card__arrow" aria-hidden="true" />
     </IonItem>
 
-    <IonItem button detail={false} lines="none" className="account-type-card" onClick={() => onSelect('organizador')}>
+    <IonItem button detail={false} lines="none" className="account-type-card" onClick={() => onSelect('gestor-academico')}>
       <span slot="start" className="account-type-card__icon" aria-hidden="true">
         <IonIcon icon={businessOutline} />
       </span>

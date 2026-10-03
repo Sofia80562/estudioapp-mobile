@@ -18,7 +18,7 @@ import {
 import AuthShell from '../components/AuthShell';
 import './register-page.css';
 
-type AccountType = 'estudiante' | 'organizador';
+type AccountType = 'estudiante' | 'gestor-academico';
 
 const RegisterPage: React.FC = () => {
   const [accountType, setAccountType] = useState<AccountType | null>(null);
@@ -26,7 +26,7 @@ const RegisterPage: React.FC = () => {
   const [successData, setSuccessData] = useState<{ type: AccountType; email: string } | null>(null);
 
   // Seleccionamos dinámicamente el esquema de Zod según el tipo de cuenta elegido
-  const currentSchema = accountType === 'organizador' ? managerRegisterFormSchema : playerRegisterFormSchema;
+  const currentSchema = accountType === 'gestor-academico' ? managerRegisterFormSchema : playerRegisterFormSchema;
 
   const {
     control,
@@ -85,7 +85,7 @@ const RegisterPage: React.FC = () => {
             <AppButton expand="block" fill="outline" onClick={() => setAccountType('estudiante')}>
               Estudiante y metas académicas
             </AppButton>
-            <AppButton expand="block" fill="outline" onClick={() => setAccountType('organizador')}>
+            <AppButton expand="block" fill="outline" onClick={() => setAccountType('gestor-academico')}>
               Gestionar grupos o sedes
             </AppButton>
           </div>
